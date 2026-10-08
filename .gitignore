@@ -1,0 +1,30 @@
+# Environment / Secrets
+.env
+.env.local
+*.env
+!.env.example
+contracts/.env
+frontend/.env
+frontend/.env.local
+
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+dist-ssr/
+*.local
+
+# Foundry / Contracts
+cache/
+contracts/cache/
+out/
+contracts/out/
+broadcast/
+contracts/broadcast/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
