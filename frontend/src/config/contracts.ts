@@ -1,7 +1,7 @@
 import CircleFlowTokenAbi from '../abi/CircleFlowToken.json';
 import CircleFlowAbi from '../abi/CircleFlow.json';
 
-export const CHAIN_ID = Number(import.meta.env.VITE_CHAIN_ID || import.meta.env.VITE_TARGET_CHAIN_ID || '11155111');
+export const CHAIN_ID = Number(import.meta.env.VITE_TARGET_CHAIN_ID || '11155111');
 
 export const CIRCLEFLOW_TOKEN_ADDRESS = (
   import.meta.env.VITE_CIRCLEFLOW_TOKEN_ADDRESS ||
@@ -9,7 +9,6 @@ export const CIRCLEFLOW_TOKEN_ADDRESS = (
 ) as `0x${string}`;
 
 export const CIRCLEFLOW_CONTRACT_ADDRESS = (
-  import.meta.env.VITE_CIRCLEFLOW_CONTRACT_ADDRESS ||
   import.meta.env.VITE_CIRCLE_FLOW_CONTRACT_ADDRESS ||
   '0xC403086b54EcE2148e3b520FA83896aBE70A5Bd2'
 ) as `0x${string}`;
@@ -19,6 +18,8 @@ export const REOWN_PROJECT_ID = import.meta.env.VITE_REOWN_PROJECT_ID || 'b0ed2f
 export const RPC_URL = import.meta.env.VITE_RPC_URL || 'https://eth-sepolia.g.alchemy.com/v2/alch_ydAGy-RsnPpZC3p33So34';
 
 export const EXPLORER_URL = import.meta.env.VITE_BLOCK_EXPLORER_URL || 'https://sepolia.etherscan.io';
+
+export const APP_URL = import.meta.env.VITE_APP_URL || 'https://circle-flow.vercel.app';
 
 export const TOKEN_ABI = CircleFlowTokenAbi;
 export const CIRCLEFLOW_ABI = CircleFlowAbi;

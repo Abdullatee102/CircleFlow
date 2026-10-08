@@ -2,7 +2,7 @@ import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { sepolia } from '@reown/appkit/networks';
 import { http } from 'wagmi';
-import { REOWN_PROJECT_ID, RPC_URL } from './contracts';
+import { APP_URL, REOWN_PROJECT_ID, RPC_URL } from './contracts';
 
 export const networks = [sepolia];
 
@@ -22,7 +22,7 @@ export const modal = createAppKit({
   metadata: {
     name: 'CircleFlow',
     description: 'On-Chain Rotating Savings Protocol',
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://circleflow.app',
+    url: typeof window !== 'undefined' ? window.location.origin : APP_URL,
     icons: ['https://avatars.githubusercontent.com/u/179229932'],
   },
   themeMode: 'dark',
