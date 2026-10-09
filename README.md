@@ -3,7 +3,7 @@
 > **Subtitle**: On-Chain Rotating Savings Protocol  
 > **Network**: Ethereum Sepolia (Chain ID: `11155111`)  
 > **Test Asset**: CircleFlow Token (`CFT`)  
-> **Live Application**: [circle-flow.vercel.app](https://circle-flow.vercel.app/)
+> **Live Application**: [circle-flow-9jh2.vercel.app](https://circle-flow-9jh2.vercel.app/)
 
 CircleFlow is a non-custodial, on-chain rotating savings protocol inspired by traditional African and global community savings circles (**Ajo**, **Esusu**, **Tandas**, **Chit Funds**, and **ROSCAs**).
 
@@ -219,7 +219,7 @@ VITE_REOWN_PROJECT_ID=<REOWN_PROJECT_ID>
 VITE_BLOCK_EXPLORER_URL=https://sepolia.etherscan.io
 VITE_CIRCLEFLOW_TOKEN_ADDRESS=0x4Fb8AFe76E931D44112CE4BFA2cBb801ED253805
 VITE_CIRCLEFLOW_CONTRACT_ADDRESS=0xC403086b54EcE2148e3b520FA83896aBE70A5Bd2
-VITE_APP_URL=https://circle-flow.vercel.app
+VITE_APP_URL=https://circle-flow-9jh2.vercel.app
 ```
 
 ---

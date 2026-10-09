@@ -88,7 +88,7 @@ Both contracts are deployed and verified with green checkmarks on **Sepolia Ethe
 | :--- | :--- |
 | **Network** | Ethereum Sepolia |
 | **Chain ID** | `11155111` |
-| **Live Application** | `https://circle-flow.vercel.app/` |
+| **Live Application** | `https://circle-flow-9jh2.vercel.app/` |
 | **CircleFlowToken Address** | `0x4Fb8AFe76E931D44112CE4BFA2cBb801ED253805` |
 | **CircleFlow Address** | `0xC403086b54EcE2148e3b520FA83896aBE70A5Bd2` |
 | **Etherscan CFT Status** | **Pass - Verified** |

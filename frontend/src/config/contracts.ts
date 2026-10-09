@@ -19,7 +19,7 @@ export const RPC_URL = import.meta.env.VITE_RPC_URL || 'https://eth-sepolia.g.al
 
 export const EXPLORER_URL = import.meta.env.VITE_BLOCK_EXPLORER_URL || 'https://sepolia.etherscan.io';
 
-export const APP_URL = import.meta.env.VITE_APP_URL || 'https://circle-flow.vercel.app';
+export const APP_URL = import.meta.env.VITE_APP_URL || 'https://circle-flow-9jh2.vercel.app';
 
 export const TOKEN_ABI = CircleFlowTokenAbi;
 export const CIRCLEFLOW_ABI = CircleFlowAbi;
