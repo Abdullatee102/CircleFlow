@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAccount, useWriteContract } from 'wagmi';
-import { keccak256, encodePacked, parseUnits } from 'viem';
+import { keccak256, encodePacked, parseUnits, maxUint256 } from 'viem';
 import {
   useGroup,
   useGroupMembers,
@@ -122,8 +122,9 @@ export const CircleDetailsPage: React.FC = () => {
   };
 
   const needsApproval = useMemo(() => {
-    if (!allowance || !modalState.amount) return false;
-    return allowance < modalState.amount;
+    if (!modalState.amount || modalState.amount === 0n) return false;
+    const currentAllowance = allowance ?? 0n;
+    return currentAllowance < modalState.amount;
   }, [allowance, modalState.amount]);
 
   const handleApprove = async () => {
@@ -134,7 +135,7 @@ export const CircleDetailsPage: React.FC = () => {
         address: CIRCLEFLOW_TOKEN_ADDRESS,
         abi: TOKEN_ABI,
         functionName: 'approve',
-        args: [CIRCLEFLOW_CONTRACT_ADDRESS, modalState.amount * 10n],
+        args: [CIRCLEFLOW_CONTRACT_ADDRESS, maxUint256],
       });
       await new Promise((r) => setTimeout(r, 4000));
       await refetchAllowance();

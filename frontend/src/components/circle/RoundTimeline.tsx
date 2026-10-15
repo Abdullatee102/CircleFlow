@@ -25,15 +25,22 @@ export const RoundTimeline: React.FC<RoundTimelineProps> = ({
   const now = Math.floor(Date.now() / 1000);
   const deadline = Number(roundInfo.contributionDeadline);
   const graceEnd = Number(roundInfo.gracePeriodEnd);
+  const isRoundStarted = deadline > 0 && Number(currentRound) > 0;
 
-  const isCollected = roundInfo.totalCollected >= targetPot;
-  const isPastDeadline = now > deadline;
-  const isPastGrace = now > graceEnd;
-  const isInGrace = isPastDeadline && !isPastGrace;
+  const isCollected = isRoundStarted && roundInfo.totalCollected >= targetPot;
+  const isPastDeadline = isRoundStarted && now > deadline;
+  const isPastGrace = isRoundStarted && now > graceEnd;
+  const isInGrace = isRoundStarted && isPastDeadline && !isPastGrace;
 
-  const isUserRecipient = userAddress && roundInfo.recipient.toLowerCase() === userAddress.toLowerCase();
+  const isUserRecipient =
+    userAddress &&
+    roundInfo.recipient !== '0x0000000000000000000000000000000000000000' &&
+    roundInfo.recipient.toLowerCase() === userAddress.toLowerCase();
 
   const getStatus = () => {
+    if (!isRoundStarted) {
+      return { text: 'Awaiting Circle Activation', variant: 'blue' as const };
+    }
     if (roundInfo.payoutExecuted) {
       return { text: 'Payout Completed', variant: 'brand' as const };
     }
@@ -80,7 +87,9 @@ export const RoundTimeline: React.FC<RoundTimelineProps> = ({
               Scheduled Recipient
             </span>
             <span className="font-mono text-sm font-bold text-slate-100">
-              {formatAddress(roundInfo.recipient)} {isUserRecipient && '(You)'}
+              {!isRoundStarted || roundInfo.recipient === '0x0000000000000000000000000000000000000000'
+                ? 'Pending Circle Activation'
+                : `${formatAddress(roundInfo.recipient)} ${isUserRecipient ? '(You)' : ''}`}
             </span>
           </div>
         </div>
@@ -117,9 +126,11 @@ export const RoundTimeline: React.FC<RoundTimelineProps> = ({
           <div>
             <span className="text-xs text-slate-400 font-medium block">Contribution Deadline</span>
             <span className="text-xs font-semibold text-slate-200 mt-0.5 block">
-              {new Date(deadline * 1000).toLocaleString()}
+              {isRoundStarted ? new Date(deadline * 1000).toLocaleString() : 'Pending Circle Activation'}
             </span>
-            {isPastDeadline ? (
+            {!isRoundStarted ? (
+              <span className="text-[10px] text-slate-400 font-medium mt-0.5 block">Awaiting round start</span>
+            ) : isPastDeadline ? (
               <span className="text-[10px] text-amber-400 font-medium mt-0.5 block">Expired</span>
             ) : (
               <span className="text-[10px] text-emerald-400 font-medium mt-0.5 block">Open for payment</span>
@@ -135,17 +146,20 @@ export const RoundTimeline: React.FC<RoundTimelineProps> = ({
               Grace Period ({Number(lateFeePercent) / 100}% Late Fee)
             </span>
             <span className="text-xs font-semibold text-slate-200 mt-0.5 block">
-              {new Date(graceEnd * 1000).toLocaleString()}
+              {isRoundStarted ? new Date(graceEnd * 1000).toLocaleString() : 'Pending Circle Activation'}
             </span>
-            {isInGrace && (
+            {!isRoundStarted ? (
+              <span className="text-[10px] text-slate-400 font-medium mt-0.5 block">Awaiting round start</span>
+            ) : isInGrace ? (
               <span className="text-[10px] text-amber-400 font-semibold mt-0.5 block animate-pulse">
                 Late contribution accepted with penalty
               </span>
-            )}
-            {isPastGrace && (
+            ) : isPastGrace ? (
               <span className="text-[10px] text-rose-400 font-semibold mt-0.5 block">
                 Grace period ended
               </span>
+            ) : (
+              <span className="text-[10px] text-slate-400 font-medium mt-0.5 block">Upcoming</span>
             )}
           </div>
         </div>
