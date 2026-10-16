@@ -9,6 +9,8 @@ interface PayoutOrderListProps {
   contributionPerRound: bigint;
   currentRound: bigint | number;
   userAddress?: `0x${string}`;
+  isCircleCompleted?: boolean;
+  currentRoundPayoutExecuted?: boolean;
 }
 
 export const PayoutOrderList: React.FC<PayoutOrderListProps> = ({
@@ -17,6 +19,8 @@ export const PayoutOrderList: React.FC<PayoutOrderListProps> = ({
   contributionPerRound,
   currentRound,
   userAddress,
+  isCircleCompleted,
+  currentRoundPayoutExecuted,
 }) => {
   const roundPot = contributionPerRound * BigInt(targetMembers);
 
@@ -38,8 +42,12 @@ export const PayoutOrderList: React.FC<PayoutOrderListProps> = ({
         {order.map((recipient, idx) => {
           const position = idx + 1;
           const isCurrentUser = userAddress && recipient.toLowerCase() === userAddress.toLowerCase();
-          const isCurrentRound = BigInt(position) === currentRound;
-          const isCompleted = BigInt(position) < currentRound;
+          const isThisRound = BigInt(position) === currentRound;
+          const isCompleted =
+            Boolean(isCircleCompleted) ||
+            BigInt(position) < currentRound ||
+            (isThisRound && Boolean(currentRoundPayoutExecuted));
+          const isCurrentRound = !isCompleted && isThisRound;
           // Position p requires: (N - p) * contributionPerRound
           const requiredReserve = (Number(targetMembers) - position) * Number(contributionPerRound);
 
@@ -112,4 +120,3 @@ export const PayoutOrderList: React.FC<PayoutOrderListProps> = ({
     </Card>
   );
 };
-

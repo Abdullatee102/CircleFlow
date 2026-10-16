@@ -13,6 +13,7 @@ import {
   useHasContributed,
   useCFTBalance,
   useCFTAllowance,
+  publicClient,
 } from '../hooks/useCircleFlow';
 import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
@@ -131,13 +132,20 @@ export const CircleDetailsPage: React.FC = () => {
     if (!modalState.amount) return;
     try {
       setIsApproving(true);
-      await writeTokenAsync({
+      setParsedError(null);
+      const hash = await writeTokenAsync({
         address: CIRCLEFLOW_TOKEN_ADDRESS,
         abi: TOKEN_ABI,
         functionName: 'approve',
         args: [CIRCLEFLOW_CONTRACT_ADDRESS, maxUint256],
       });
-      await new Promise((r) => setTimeout(r, 4000));
+      if (!hash) {
+        throw new Error('The wallet did not return a transaction hash for the approval.');
+      }
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'reverted') {
+        throw new Error('Approval transaction reverted on-chain.');
+      }
       await refetchAllowance();
       setIsApproving(false);
     } catch (err: any) {
@@ -151,6 +159,7 @@ export const CircleDetailsPage: React.FC = () => {
     try {
       setTxStep('preparing');
       setParsedError(null);
+      setTxHash(undefined);
 
       let hash: `0x${string}` | undefined;
 
@@ -246,9 +255,15 @@ export const CircleDetailsPage: React.FC = () => {
         }
       }
 
+      if (!hash) {
+        throw new Error('The wallet did not return a transaction hash. The action was not confirmed.');
+      }
       setTxHash(hash);
       setTxStep('confirming');
-      await new Promise((r) => setTimeout(r, 6000));
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'reverted') {
+        throw new Error('Transaction reverted on-chain. Please verify contract conditions and retry.');
+      }
       await refetchAll();
       setTxStep('confirmed');
     } catch (err: any) {
@@ -599,6 +614,8 @@ export const CircleDetailsPage: React.FC = () => {
           contributionPerRound={group.contributionPerRound}
           currentRound={group.currentRound}
           userAddress={address}
+          isCircleCompleted={group.status === 3}
+          currentRoundPayoutExecuted={roundInfo?.payoutExecuted}
         />
       )}
 
@@ -639,4 +656,3 @@ export const CircleDetailsPage: React.FC = () => {
     </div>
   );
 };
-
